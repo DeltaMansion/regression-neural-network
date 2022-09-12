@@ -14,8 +14,6 @@ def conversion_to_numbers_data(raw_data):
         return_data[index][3] = convert_unit(keys_country, row[3])
         return_data[index][4] = convert_unit(keys_color, row[4])
         return_data[index][5] = float(row[5])
-
-        #return_data[index][5] = float(row[5])
         return_data[index][6] = float(row[6])
         return_data[index][7] = convert_unit(keys_car_type, row[7])
         return_data[index][8] = convert_unit(keys_model, row[8])
