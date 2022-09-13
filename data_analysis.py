@@ -53,19 +53,20 @@ class DataAnalyser:
 # Examples
 # --------------------------------
 
-analyser = DataAnalyser(get_data_from_file("processed_cars.csv"))
+if __name__ == "__main__":
+    analyser = DataAnalyser(get_data_from_file("processed_cars.csv"))
 
-for item in analyser.get_header():
-    print(item)
+    for item in analyser.get_header():
+        print(item)
 
-print(analyser.get_unique_items("Country"))
-print(analyser.find_float_max_min("Year"))
-print(analyser.find_float_max_min("Mileage"))
-print(analyser.find_float_max_min("Maximum_power", True))
-print(analyser.find_float_max_min("Maximum_speed", True))
-print(analyser.find_float_max_min("Consumption", True))
+    print(analyser.get_unique_items("Country"))
+    print(analyser.find_float_max_min("Year"))
+    print(analyser.find_float_max_min("Mileage"))
+    print(analyser.find_float_max_min("Maximum_power", True))
+    print(analyser.find_float_max_min("Maximum_speed", True))
+    print(analyser.find_float_max_min("Consumption", True))
 
-print("Models")
-for key, value in analyser.sort_by_key("mark", "Model").items():
-    print(key + ": ", value)
+    print("Models")
+    for key, value in analyser.sort_by_key("mark", "Model").items():
+        print(key + ": ", value)
 
