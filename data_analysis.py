@@ -1,17 +1,3 @@
-from pathlib import Path
-import os
-
-
-def get_data_from_file(file_name: str) -> list[list]:
-    data = []
-    with open(Path(os.path.realpath(__file__)).parent / file_name) as file:
-        lines = file.readlines()
-
-        for line in lines:
-            data.append([item for item in line.replace('\n', '').split(",")])
-    return data
-
-
 class DataAnalyser:
     data = []
 
@@ -33,8 +19,8 @@ class DataAnalyser:
         arr = [float(item) for item in self[key] if float(item) != 0 or not ignore_zeros]
         return max(arr), min(arr)
 
-    def get_unique_items(self, index: int | str) -> list:
-        return list(set(self[index]))
+    def get_unique_items(self, index: int | str, items_to_ignore: list = []) -> list:
+        return filter(lambda item: item not in items_to_ignore,list(set(self[index])))
 
     def sort_by_key(self, key_col: str, value_col: str, only_unique: bool = True) -> dict[list]:
         result = {}
@@ -54,6 +40,8 @@ class DataAnalyser:
 # --------------------------------
 
 if __name__ == "__main__":
+    from file_utils import get_data_from_file
+
     analyser = DataAnalyser(get_data_from_file("processed_cars.csv"))
 
     for item in analyser.get_header():
