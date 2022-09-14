@@ -1,44 +1,40 @@
 import numpy
+from data_analysis import DataAnalyser
+from file_utils import get_data_from_file
+from headers import headers
 
-# 0    1   2          3       4     5       6    7        8     9             10            11
-# mark box drive_unit country color mileage year car_type model maximum_power maximum_speed consumption
+unique_indexes = [0, 1, 4, 6, 7]
+float_indexes = [2, 3, 5, 9, 10, 11, 12, 13]
 
+analyser = DataAnalyser(get_data_from_file("processed_dataset_result.csv", ";"))
+
+keys_dict = {}
+
+for i in unique_indexes:
+    keys_dict[i] = analyser.get_unique_items(headers[i], [''])
+
+print(analyser.get_unique_items(headers[4], ['']))
+
+for key, value in keys_dict.items():
+    #print(key, " - ", value)
+    pass
 def conversion_to_numbers_data(raw_data):
     return_data = numpy.zeros((len(raw_data), 12))
-    
+
     index = 0
     for row in raw_data:
-        return_data[index][0] = convert_unit(keys_mark, row[0])
-        return_data[index][1] = convert_unit(keys_box, row[1])
-        return_data[index][2] = convert_unit(keys_drive_unit, row[2])
-        return_data[index][3] = convert_unit(keys_country, row[3])
-        return_data[index][4] = convert_unit(keys_color, row[4])
-        return_data[index][5] = float(row[5])
-        return_data[index][6] = float(row[6])
-        return_data[index][7] = convert_unit(keys_car_type, row[7])
-        return_data[index][8] = convert_unit(keys_model, row[8])
-        return_data[index][9] = float(row[9])
-        return_data[index][10] = float(row[10])
-        return_data[index][11] = float(row[11])
+        for j in unique_indexes:
+            return_data[index][j] = convert_unit(keys_dict[i])
+
+        for j in float_indexes:
+            return_data[index][j] = float(row[j])
+
         index += 1
     return return_data
-    
+
 def convert_unit(keys_list, elem):
     try:
         return keys_list.index(elem)
     except ValueError:
         return -1
-        
-keys_box = ["mechanics", "automatic", "variator", "robot"]
 
-keys_drive_unit = ["rear", "front", "full"]
-
-keys_car_type = ["Compact MPV", "Convertible", "Coupe", "Fastback", "Hardtop Coupe", "Hatchback", "Liftback", "Limousine", "Microvan", "Minivan", "Pickup", "Roadster", "SUV", "Sedan", "Speedster", "Station Wagon", "Van"]
-
-keys_color = ["beige", "black", "blue", "brown", "gold", "gray", "green", "light Blue", "magenta", "orange", "pink", "purple", "red", "silver", "white", "yellow"]
-
-keys_country = ["China", "Czech Republic", "France", "German", "Iran", "Italy", "Japan", "Russia", "South Korea", "Spain", "Sweden", "Taiwan", "UK", "USA", "Ukraine", "Uzbekistan"]
-
-keys_mark = ["AC", "AMC", "Acura", "Alfa Romeo", "Aston Martin", "Audi", "BMW", "Bentley", "Cadillac", "Changan", "Chery", "Chevrolet", "Chrysler", "Citroen", "DW Hower", "Daewoo", "Daihatsu", "Daimler", "Datsun", "Dodge", "DongFeng", "FAW", "Ferrari", "Fiat", "Ford", "GAZ", "GMC", "Geely", "Genesis", "Great Wall", "Haval", "Hawtai", "Honda", "Hummer", "Hyundai", "ICH", "Infiniti", "Iran Khodro", "Isuzu", "Jaguar", "Jeep", "Kia", "LADA (VAZ)", "Lamborghini", "Land Rover", "Lexus", "Lifan", "Lincoln", "Luxgen", "LyAZ", "MINI", "Maserati", "Maybach", "Mazda", "McLaren", "Mercedes-Benz", "Mitsubishi", "Moskvich", "Nissan", "Opel", "Peugeot", "Porsche", "Race car", "Ravon", "Renault", "Rolls-Royce", "Rover", "SEAT", "Saab", "Scion", "Skoda", "Smart", "SsangYong", "Subaru", "Suzuki", "TagAZ", "Tesla", "Toyota", "Volkswagen", "Volvo", "Vortex", "YAZ", "ZAZ", "ZIL", "ZX"]
-
-keys_model = ["1 series", "100", "1007", "107", "1111 Ока", "12 ZIM", "13 «Chaika»", "14 «Chaika»", "147", "159", "19", "190 (W201)", "2", "2 series", "2 series Active Tourer", "2 series Grand Tourer", "206", "207", "208", "21 «Volga»", "2101", "2103", "2104", "2105", "2106", "2109", "21099", "2110", "2111", "2112", "2113", "2114", "2115", "2121 (4x4)", "2125 «Kombi»", "2126 «Oda»", "2131 (4x4)", "2140", "2141", "22 «Volga»", "2329", "24 «Volga»", "25", "3", "3 MPS", "3 series", "3008", "300C", "300M", "301", "307", "308", "3102 «Volga»", "31029 «Volga»", "3110 «Volga»", "31105 «Volga»", "3151", "323", "350Z", "4 series", "400", "4007", "401", "403", "406", "407", "408", "4104", "412", "469", "488", "4Runner", "5", "5 series", "500", "508", "57", "6", "6 MPS", "6 series", "600", "605", "612", "62", "626", "69", "7 series", "720S", "75", "8 series", "80", "850", "9-3", "9-5", "911", "924", "940", "965", "967", "968", "969", "A-Class", "A-Class AMG", "A1", "A3", "A4", "A4 allroad", "A5", "A6", "A6 allroad", "A7", "A8", "AD", "AMG GT", "ASX", "ATS", "Accent", "Accord", "Actyon", "Actyon Sports", "Airtrek", "Albea", "Alhambra", "Almera", "Almera Classic", "Alphard", "Altea", "Altezza", "Amarok", "Antara", "Aquila", "Aristo", "Arkana", "Armada", "Arnage", "Astra", "Astra OPC", "Atlas", "Atrai", "Auris", "Avalanche", "Avante", "Avenger", "Avensis", "Avensis Verso", "Aveo", "Axiom", "B-Class", "BLS", "BT-50", "Baleno", "Beetle", "Bentayga", "Berlingo", "Besturn X80", "Blazer K5", "Boliger", "Bonus (A13)", "Bora", "Boxster", "Bravo", "Brera", "Bronco", "Bronco-II", "C-Class", "C-Class AMG", "C-Crosser", "C-Elysee", "C-HR", "C-MAX", "C1", "C3", "C3 Aircross", "C3 Picasso", "C30", "C4", "C4 Aircross", "C4 Picasso", "C5", "C5 Aircross", "C70", "CL-Class", "CL-Class AMG", "CLA", "CLA AMG", "CLK-Class", "CLS", "CLS AMG", "CR-V", "CR-Z", "CS35", "CS35PLUS", "CT", "CTS", "CX-5", "CX-7", "CX-9", "Caddy", "Caldina", "Caliber", "Calibra", "Camaro", "Camry", "Capella", "Caprice", "Captiva", "Caravan", "Caravelle", "Carens", "Carina", "Carisma", "Carnival", "Cayenne", "Cayenne Coupe", "Cedric", "Ceed", "Ceed GT", "Celica", "Cerato", "Challenger", "Chance", "Charger", "Chaser", "Cherokee", "Citan", "Civic", "Clio", "Clio RS", "Clubman", "Cobalt", "Cobra", "Colt", "Commander", "Compass", "Continental Flying Spur", "Continental GT", "Coolray", "Corolla", "Corolla Levin", "Corolla Verso", "Corsa", "Corsa OPC", "Corvette", "Countryman", "Coupe", "Creta", "CrossEastar (B14)", "Crossfire", "Crosstour", "Crown", "Crown Victoria", "Cruze", "Cube", "DB11", "DS4", "DS5", "Damas", "Dart", "Defender", "Delica", "Delica D:5", "Demio", "Discovery", "Discovery Sport", "Doblo", "Dokker", "Durango", "Duster", "E-Class", "E-Class AMG", "E-Pace", "ES", "EX", "Eado", "Eagle", "Echo", "Eclipse", "Eclipse Cross", "EcoSport", "Econoline", "Edge", "Elantra", "Element", "Elgrand", "Emgrand EC7", "Emgrand X7", "Eos", "Epica", "Equus", "Escalade", "Escape", "Escort", "Espace", "Estina", "EuroVan", "Excursion", "Expedition", "Explorer", "Express", "F-150", "F-Pace", "F-Type", "F7", "F7x", "FF", "FJ Cruiser", "FR-V", "FX", "Fabia", "Felicia", "Fiesta", "Fit", "Fluence", "Flying Spur", "Focus", "Focus ST", "Fora (A21)", "Forester", "Forfour", "Formula", "Fortuner", "Fortwo", "Freelander", "Frontera", "G", "G-Class", "G-Class AMG", "G80", "G90", "GAZ 67", "GL-Class", "GLA", "GLA AMG", "GLB", "GLC", "GLC AMG", "GLC Coupe", "GLE", "GLE AMG", "GLE Coupe", "GLE Coupe AMG", "GLK-Class", "GLS", "GLS AMG", "GS", "GT-R", "GT86", "GTC4Lusso", "GX", "Galant", "Galaxy", "Galloper", "Gentra", "Getz", "Ghibli", "Ghost", "Golf", "Golf GTI", "Golf Plus", "Golf R", "GranTurismo", "Grand Cherokee", "Grand HiAce", "Grand Starex", "Grand Vitara", "Grandeur", "Granta", "H-1", "H1", "H2", "H3", "H30 Cross", "H6", "H9", "HR-V", "Hatch", "HiAce", "Highlander", "Hilux", "Hilux Surf", "Hover", "Hover H3", "Hover H5", "Hover M2", "Hunter", "Huracán", "I-Pace", "IS", "Ignis", "Impala", "Impreza", "Impreza WRX", "Impreza WRX STi", "IndiS (S18D)", "Insignia", "Insignia OPC", "Jazz", "Jetta", "Jimny", "Journey", "Juke", "Juke Nismo", "Jumpy", "K5", "K900", "KA", "Kalina", "Kangoo", "Karoq", "Kimo (A1)", "Koleos", "Korando", "Kuga", "Kyron", "L200", "LM", "LS", "LX", "Lacetti", "Laguna", "Lancer", "Lancer Evolution", "Land Cruiser", "Land Cruiser Prado", "Landmark", "Lanos", "Largus", "Latitude", "Leaf", "Legacy", "Leganza", "Legend", "Leon", "Levante", "Liana", "Liberty", "Liberty (Patriot)", "Logan", "Luxgen7 SUV", "M", "M-20 «Pobeda»", "M-Class", "M-Class AMG", "M2", "M3", "M4", "M5", "M6", "M8", "MDX", "MPV", "MR2", "MX-5", "Macan", "Magnum", "Malibu", "March", "Mark II", "Mark VII", "Matrix", "Maverick", "Maxima", "Maybach S-Class", "Megane", "Meriva", "Micra", "Minicab", "Model 3", "Model A", "Model S", "Model X", "Mohave", "Mokka", "Mondeo", "Monterey", "Montero", "Montero Sport", "Multivan", "Murano", "Musso", "Mustang", "NP300", "NV200", "NX", "Navigator", "Nexia", "Nexia R3", "Nitro", "Niva", "Noah", "Note", "Octavia", "Octavia RS", "Odyssey", "Omega", "Opirus", "Optima", "Orlando", "Outback", "Outlander", "Pacifica", "Pajero", "Pajero Mini", "Pajero Pinin", "Pajero Sport", "Panamera", "Partner", "Passat", "Passat CC", "Pathfinder", "Patriot", "Patrol", "Phaeton", "Phantom", "Picanto", "Pickup", "Pilot", "Pointer", "Polo", "Prelude", "Primera", "Priora", "Prius", "Prius v (+)", "Proceed", "Puma", "Punto", "Q3", "Q3 Sportback", "Q5", "Q50", "Q60", "Q7", "Q70", "QQ6 (S21)", "QX30", "QX50", "QX56", "QX60", "QX70", "QX80", "Qashqai", "Qashqai+2", "Quattroporte", "Quoris", "R-Class", "R2", "R4", "R8", "RAM", "RAV4", "RCZ", "RDX", "RS 3", "RS 5", "RS 6", "RS Q3", "RX", "RX-7", "RX-8", "Range Rover", "Range Rover Evoque", "Range Rover Sport", "Range Rover Velar", "Ranger", "Rapid", "Rapide", "Rexton", "Rezzo", "Rio", "Road Partner", "Roadster", "Rodius", "Roomster", "S-Class", "S-Class AMG", "S-MAX", "S-Type", "S2000", "S3", "S4", "S40", "S60", "S8", "S80", "SL-Class", "SL-Class AMG", "SLK-Class", "SLS AMG", "SQ7", "SRX", "SX4", "Safe", "Samand", "Sandero", "Santa Fe", "Savana", "Scenic", "Scirocco", "Scorpio", "Scudo", "Sebring", "Sedici", "Sephia", "Sequoia", "Sera", "Seville", "Sharan", "Shuma", "Sienna", "Silver Cloud", "Silverado", "Silvia", "Sirion", "Skyline", "Soarer", "Solano", "Solaris", "Sonata", "Sorento", "Soul", "Space Star", "SpaceTourer", "Spark", "Sportage", "Sprinter", "Stagea", "Starex", "Stavic", "Stepwgn", "Stinger", "Stratus", "Stream", "Suburban", "Superb", "Supra", "Svyatogor", "Swift", "Symbol", "TLX", "TT", "Tager", "Tahoe", "Talisman", "Taurus", "Taycan", "Teana", "Teramont", "Terracan", "Terrano", "Tiggo (T11)", "Tiggo 3", "Tiggo 5", "Tiguan", "Tiida", "Tingo", "Touareg", "Touran", "Tourneo Connect", "Town & Country", "Town Car", "Tracker", "Trafic", "TrailBlazer", "Trajet", "Transporter", "Traveller", "Tribeca", "Trooper", "Tucson", "Tundra", "Type 1", "UX", "Urus", "V-Class", "V40", "V40 Cross Country", "V50", "V60", "V60 Cross Country", "V90 Cross Country", "Van", "Vectra", "Vectra OPC", "Vega", "VehiCross", "Vel Satis", "Vellfire", "Venga", "Venza", "Verna", "Verso", "Vesta", "Vezel", "Viano", "Vitara", "Vito", "Vitz", "Volga Siber", "Volt", "W123", "W124", "W128", "W188", "WRX", "Wraith", "Wrangler", "X-Trail", "X-Type", "X1", "X2", "X3", "X3 M", "X350", "X4", "X5", "X5 M", "X6", "X6 M", "X60", "X7", "XC40", "XC60", "XC70", "XC90", "XE", "XF", "XJ", "XK", "XRAY", "XT5", "XV", "Xedos 6", "Xsara Picasso", "Yeti", "Z3", "Z4", "ZDX", "Zafira", "Zest", "i20", "i3", "i30", "i40", "i8", "ix35", "mi-DO", "on-DO", "tC"]

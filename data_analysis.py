@@ -20,7 +20,7 @@ class DataAnalyser:
         return max(arr), min(arr)
 
     def get_unique_items(self, index: int | str, items_to_ignore: list = []) -> list:
-        return filter(lambda item: item not in items_to_ignore,list(set(self[index])))
+        return list(filter(lambda item: item not in items_to_ignore,list(set(self[index]))))
 
     def sort_by_key(self, key_col: str, value_col: str, only_unique: bool = True) -> dict[list]:
         result = {}
