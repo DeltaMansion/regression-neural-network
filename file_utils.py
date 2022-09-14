@@ -2,15 +2,17 @@ from pathlib import Path
 import os
 from data_analysis import DataAnalyser
 from csv import reader
+import numpy as np
 
 
 def get_data_from_file(file_name: str, divider: str = ",") -> list[list]:
-    data = []
-    with open(Path(os.path.realpath(__file__)).parent / file_name) as file:
-        reader_obj = reader(file, quotechar=divider)
+    #data = []
+    #with open(Path(os.path.realpath(__file__)).parent / file_name) as file:
+    #    reader_obj = reader(file, quotechar=divider)
 
-        for line in reader_obj:
-            data.append(line)
+    #    for line in reader_obj:
+    #        data.append(line)
+    data = np.loadtxt('./' + file_name, delimiter=divider, skiprows=0, dtype='U').tolist()
     return data
 
 

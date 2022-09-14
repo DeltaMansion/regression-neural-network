@@ -4,14 +4,12 @@ import numpy as np
 import matplotlib.pyplot as plt
 import timeit
 import keys_lists
-
 # вытащить данные из файла и разделить на наборы: X - то, что вводим в нейронку, Y - то, что хотим получить из неё
 def get_xy_data(file_name):
-    dataset = np.loadtxt('./' + file_name, delimiter=',', skiprows=1, dtype='U')
-
+    dataset = np.loadtxt('./' + file_name, delimiter=';', skiprows=1, dtype='U')
     # [:] - всё содержимое строки, [N] - номер столбца данных в файле
-    x = keys_lists.conversion_to_numbers_data(dataset[:, 0:12])
-    y = np.array(dataset[:, 12]).astype(float)
+    x = keys_lists.conversion_to_numbers_data(dataset[:, 0:14])
+    y = np.array(dataset[:, 14]).astype(float)
 
     #если надо посмотреть на данные
     #print(x)
@@ -20,7 +18,7 @@ def get_xy_data(file_name):
     return x, y
 
 # данные для обучения и тестирования
-x_train, y_train = get_xy_data("processed_cars.csv")
+x_train, y_train = get_xy_data("dataset.csv")
 columns_counter = len(x_train[0])
 
 # создание модели сети
@@ -37,7 +35,7 @@ history = model.fit(x_train, y_train, epochs=50, verbose=2, validation_split=0.2
 end_seconds: float = timeit.default_timer()
 
 # тестирование на пользовательских данных
-final_test_data = np.array(['Chrysler', 'automatic', 'front', 'USA', 'black', '250000.0', '2007.0', 'Sedan', 'Sebring', '189.0', '207.0', '10.7'])
+final_test_data = np.array(['Chrysler', 'Sebring', '250000.0', '2007.0', 'D', '189.0', 'front', 'automatic', 'no', '2.7', '260.0', '207.0', '9.2', '10.7'])
 final_test_data = keys_lists.conversion_to_numbers_data(final_test_data.reshape((1,)+final_test_data.shape))
 result = model.predict(final_test_data)
 
