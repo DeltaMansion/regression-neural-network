@@ -2,6 +2,7 @@ import numpy
 from data_analysis import DataAnalyser
 from file_utils import get_data_from_file
 from headers import headers
+
 unique_indexes = [0, 1, 4, 6, 7, 8]
 float_indexes = [2, 3, 5, 9, 10, 11, 12, 13, 14]
 float_indexes2 = [2, 3, 5, 9, 10, 11, 12, 13]
