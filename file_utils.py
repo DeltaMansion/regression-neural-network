@@ -3,7 +3,15 @@ import os
 from data_analysis import DataAnalyser
 from csv import reader
 import numpy as np
+import sys
 
+def resource_path(relative_path):
+    try:
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)
 
 def get_data_from_file(file_name: str, divider: str = ",") -> list[list]:
     #data = []
@@ -12,7 +20,7 @@ def get_data_from_file(file_name: str, divider: str = ",") -> list[list]:
 
     #    for line in reader_obj:
     #        data.append(line)
-    data = np.loadtxt('./' + file_name, delimiter=divider, skiprows=0, dtype='U').tolist()
+    data = np.loadtxt(resource_path(file_name), delimiter=divider, skiprows=0, dtype='U').tolist()
     return data
 
 

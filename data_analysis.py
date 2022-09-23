@@ -42,19 +42,23 @@ class DataAnalyser:
 if __name__ == "__main__":
     from file_utils import get_data_from_file
 
-    analyser = DataAnalyser(get_data_from_file("processed_cars.csv"))
+    analyser = DataAnalyser(get_data_from_file("dataset.csv"))
 
-    for item in analyser.get_header():
-        print(item)
+    #for item in analyser.get_header():
+        #print(item)
 
-    print(analyser.get_unique_items("Country"))
-    print(analyser.find_float_max_min("Year"))
-    print(analyser.find_float_max_min("Mileage"))
-    print(analyser.find_float_max_min("Maximum_power", True))
-    print(analyser.find_float_max_min("Maximum_speed", True))
-    print(analyser.find_float_max_min("Consumption", True))
+#Mileage;Year;Maximum_powerVolume;Torque;Maximum_speed;Speed_to_100;Consumption;Price
+    #print(analyser.get_unique_items("Country"))
+    #print(analyser.find_float_max_min("Mileage", False))
+    # print(analyser.find_float_max_min("Year", False))
+    # print(analyser.find_float_max_min("Maximum_power", False))
+    # print(analyser.find_float_max_min("Volume", False))
+    # print(analyser.find_float_max_min("Torque", False))
+    # print(analyser.find_float_max_min("Maximum_speed", False))
+    # print(analyser.find_float_max_min("Speed_to_100", False))
+    #print(analyser.find_float_max_min("Consumption", False))
 
-    print("Models")
-    for key, value in analyser.sort_by_key("mark", "Model").items():
-        print(key + ": ", value)
+    #print("Models")
+    #for key, value in analyser.sort_by_key("mark", "Model").items():
+        #print(key + ": ", value)
 

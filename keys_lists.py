@@ -27,7 +27,7 @@ def conversion_to_numbers_data(raw_data):
             return_data[index][j] = convert_unit(keys_dict[j], raw_data[index][j])
 
         for j in float_indexes2:
-            return_data[index][j] = float(raw_data[index][j])
+            return_data[index][j] = convert_float(raw_data[index][j])
         index += 1
     return return_data
 
@@ -36,4 +36,10 @@ def convert_unit(keys_list, elem):
         return keys_list.index(elem)
     except ValueError:
         return -1
+
+def convert_float(elem):
+    if (elem == ''):
+        return -1
+    else:
+        return float(elem)
 

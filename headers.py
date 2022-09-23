@@ -10,7 +10,7 @@ headers_main =  [
 ]
 
 other_headers = [
-    "Boost_type", # Max min, ignore 0
+    "Boost_type",
     "Volume", # Max min, ignore 0
     "Torque", # Max min, ignore 0
     "Maximum_speed", # Max min, ignore 0
