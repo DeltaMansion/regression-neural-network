@@ -485,7 +485,7 @@ class Model:
 						except Exception:
 							preparedData[i][j] = Model.convertUnit(self.uniqueValues[self.columns[i]], str(data[i][j]))
 
-			predictedData = self.model.predict(preparedData)
+			predictedData = self.model.predict(np.asarray(preparedData).astype(np.float32))
 
 		return predictedData[0][0]
 
