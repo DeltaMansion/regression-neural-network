@@ -6,10 +6,12 @@ from file.csvmanager import CsvManager
 from file.filemanager import FileManager
 from keras.layers import Dense
 from keras.models import Sequential
-
+from sklearn.preprocessing import MinMaxScaler
+import joblib
 
 class Model:
 
+	scaler = None
 	fileHandler = None
 	data = None
 	x_train = None
@@ -54,6 +56,13 @@ class Model:
 
 			if show_loading:
 				print("\r100%\n")
+
+				self.scaler = MinMaxScaler(feature_range=(0, 1))
+				self.scaler = self.scaler.fit(self.data[:, 0:14])
+
+				if os.path.isfile("scaler_save.gz") == False:
+					joblib.dump(self.scaler, "scaler_save.gz")
+				self.data[:, 0:14] = self.scaler.transform(self.data[:, 0:14])
 
 
 	def loadCsvData(self,
@@ -458,36 +467,25 @@ class Model:
 		:return:
 		"""
 
+		if self.scaler == None:
+			self.scaler = joblib.load('scaler_save.gz')
+
+		data = np.array(data)
 		predictedData = []
 
 		if self.model:
-
-			if type(data) is list:
-				data = np.array(data)
-
-			data = data.reshape((1,)+data.shape)
-			rows = 0
-			cols = 0
-
-			if data.shape[0] > 0:
-				rows = data.shape[0]
-
-			if len(data.shape) == 2 and data.shape[1] > 0:
-				cols = data.shape[1]
-
 			preparedData = np.empty(data.shape, dtype=np.object)
 
-			for i in range(rows):
-				if len(data.shape) == 2:
-					for j in range(cols):
-						try:
-							preparedData[i][j] = Model.convertFloat(str(data[i][j]))
-						except Exception:
-							preparedData[i][j] = Model.convertUnit(self.uniqueValues[self.columns[i]], str(data[i][j]))
+			for i in range(len(data)):
+				try:
+					preparedData[i] = Model.convertFloat(str(data[i]))
+				except Exception:
+					preparedData[i] = Model.convertUnit(self.uniqueValues[self.columns[i]], str(data[i]))
 
+			preparedData = self.scaler.transform([preparedData])
 			predictedData = self.model.predict(np.asarray(preparedData).astype(np.float32))
 
-		return predictedData[0][0]
+		return int(predictedData[0][0])
 
 
 if __name__ == "__main__":

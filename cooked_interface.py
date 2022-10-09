@@ -1,7 +1,7 @@
 import PySimpleGUI as sg
 import pandas as pd
 from model.model import Model
-
+import numpy as np
 model = Model()
 
 if model.loadModel("my_model"):
@@ -9,10 +9,12 @@ if model.loadModel("my_model"):
 	marks = model.uniqueValues["mark"]
 	marks = marks[~pd.isna(marks)] # убрать NaN
 	marks.sort()
+	marks = marks.tolist()
 
 	car_classes = model.uniqueValues["Car_class"]
 	car_classes = car_classes[~pd.isna(car_classes)] # убрать NaN
 	car_classes.sort()
+	car_classes = car_classes.tolist()
     
 	#Элементы ввода основных атрибутов
 	MainInputCol1 = [

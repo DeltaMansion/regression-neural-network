@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import timeit
 from model.model import Model
 from keras.layers import Dense
+np.set_printoptions(formatter={'float': '{: 0.7f}'.format})
 
 model = Model()
 model.loadCsvData("dataset.csv", sep=";")
@@ -40,8 +41,8 @@ plt.plot(history.history['val_mse'], label = 'val_mse')
 plt.xlabel('Epoch')
 plt.ylabel('mse')
 plt.legend(loc='lower right')
-plt.title('Predict - ' + str(result[0]) + ' (should be 1599000)')
+plt.title('Predict - ' + str(result) + ' (should be 1599000)')
 plt.text(0.1, 0.1, str(end_seconds - start_seconds) + ' sec')
 plt.show()
 
-model.saveModel("my_model")
+#model.saveModel("my_model")
