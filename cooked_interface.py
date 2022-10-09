@@ -43,12 +43,12 @@ if model.loadModel("my_model"):
          sg.InputText('X-Trail', size=(37, 1), key="model", background_color="#D3D3D3", text_color="black")],
         #year
         [sg.Text("Год:", background_color="#B1A7A6", text_color="black", size=(13, 1)),
-         sg.Slider(orientation="horizontal", enable_events=True, key="year-slider", range=(1908, 2022), size=(23, 13),
+         sg.Slider(orientation="horizontal", enable_events=True, key="year-slider", range=(1927, 2020), size=(23, 13),
                    trough_color="#D3D3D3", background_color="#B1A7A6", text_color="black", default_value=2018),
          sg.InputText('2018', key="year-input", enable_events=True, size=(6, 1), background_color="#D3D3D3", text_color="black")],
         # max_power
         [sg.Text("Мощность (л.с.):", background_color="#B1A7A6", text_color="black", size=(13, 1)),
-         sg.Slider(orientation="horizontal", enable_events=True, key="max_power-slider", range=(5, 850), size=(23, 13),
+         sg.Slider(orientation="horizontal", enable_events=True, key="max_power-slider", range=(5, 800), size=(23, 13),
                    trough_color="#D3D3D3", background_color="#B1A7A6", text_color="black", default_value=171),
          sg.InputText('171', key="max_power-input", enable_events=True, size=(6, 1), background_color="#D3D3D3",
                       text_color="black")],
@@ -70,12 +70,12 @@ if model.loadModel("my_model"):
 				  button_arrow_color="black", default_value='no')],
 		#torque
 		[sg.Text("Крутящий момент (Н∙м):", background_color="#B1A7A6", text_color="black", size=(20, 1)),
-		 sg.Slider(orientation="horizontal", enable_events=True, key="torque-slider", range=(0, 1500), size=(16, 13),
+		 sg.Slider(orientation="horizontal", enable_events=True, key="torque-slider", range=(0, 1000), size=(16, 13),
 				   trough_color="#D3D3D3", background_color="#B1A7A6", text_color="black", default_value=380),
 		 sg.InputText('380', key="torque-input", enable_events=True, size=(6, 1), background_color="#D3D3D3", text_color="black")],
 		#speed_to_100
 		[sg.Text("Время разгона до 100км/ч:", background_color="#B1A7A6", text_color="black", size=(20, 1)),
-		 sg.Slider(orientation="horizontal", enable_events=True, key="speed_to_100-slider", range=(0.00, 50), size=(16, 13),
+		 sg.Slider(orientation="horizontal", enable_events=True, key="speed_to_100-slider", range=(0.00, 40), size=(16, 13),
 				   trough_color="#D3D3D3", background_color="#B1A7A6", text_color="black", default_value=9.5),
 		 sg.InputText('9.5', key="speed_to_100-input", enable_events=True, size=(6, 1), background_color="#D3D3D3", text_color="black")]
 	]
@@ -89,12 +89,12 @@ if model.loadModel("my_model"):
 					  text_color="black")],
 		#maximum_speed
 		[sg.Text("Макс. скорость (км/ч): ", background_color="#B1A7A6", text_color="black"),
-		 sg.Slider(orientation="horizontal", enable_events=True, key="maximum_speed-slider", range=(10.0, 492.0), size=(20, 13),
+		 sg.Slider(orientation="horizontal", enable_events=True, key="maximum_speed-slider", range=(70.0, 350.0), size=(20, 13),
 				   trough_color="#D3D3D3", background_color="#B1A7A6", text_color="black", default_value=199),
 		 sg.InputText('199', key="maximum_speed-input", enable_events=True, size=(6, 1), background_color="#D3D3D3", text_color="black")],
 		#consumption
 		[sg.Text("Потребление топлива: ", background_color="#B1A7A6", text_color="black", size=(17, 1)),
-		 sg.Slider(orientation="horizontal", enable_events=True, key="consumption-slider", range=(0, 35), size=(20, 13),
+		 sg.Slider(orientation="horizontal", enable_events=True, key="consumption-slider", range=(0, 30), size=(20, 13),
 				   trough_color="#D3D3D3", background_color="#B1A7A6", text_color="black", default_value=6.2),
 		 sg.InputText('6.2', key="consumption-input", enable_events=True, size=(6, 1), background_color="#D3D3D3", text_color="black")]
 	]
