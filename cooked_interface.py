@@ -119,7 +119,7 @@ if model.loadModel("my_model"):
 	layout = [[sg.Frame('', layout=Input, border_width=9, background_color="#B1A7A6", title_color ="black", pad=(0, 5))]]
 
 	#Создание окна
-	window = sg.Window('Компьютерный практикум', layout, background_color='#151314', size=(850, 506))
+	window = sg.Window('Компьютерный практикум', layout, background_color='#151314', size=(860, 506))
 
 	#Обработка событий
 	while True:
