@@ -463,29 +463,45 @@ class Model:
 		"""
 		Возвращает вычесленное значение для подставляемых данных в обученную модель
 
-		:param data: 1d np.array
+		:param data: 1d or 2d np.array
 		:return:
 		"""
+
+		data = np.array(data)
+		if data.shape == (14,):
+			data = [data]
 
 		if self.scaler == None:
 			self.scaler = joblib.load('scaler_save.gz')
 
-		data = np.array(data)
+		preparedData = []
 		predictedData = []
 
 		if self.model:
-			preparedData = np.empty(data.shape, dtype=np.object)
+			for item in data:
+				preparedItem = np.empty(item.shape, dtype=np.object)
 
-			for i in range(len(data)):
-				try:
-					preparedData[i] = Model.convertFloat(str(data[i]))
-				except Exception:
-					preparedData[i] = Model.convertUnit(self.uniqueValues[self.columns[i]], str(data[i]))
+				for i in range(len(item)):
+					try:
+						preparedItem[i] = Model.convertFloat(str(item[i]))
+					except Exception:
+						preparedItem[i] = Model.convertUnit(self.uniqueValues[self.columns[i]], str(item[i]))
+				preparedData.append(preparedItem)
 
-			preparedData = self.scaler.transform([preparedData])
+			preparedData = self.scaler.transform(preparedData)
 			predictedData = self.model.predict(np.asarray(preparedData).astype(np.float32))
 
-		return int(predictedData[0][0])
+			# потому что модель выводит один элемент как массив
+			results = []
+			for item in predictedData:
+				results.append(item[0])
+
+			if len(results) == 1:
+				results = results[0]
+		return results
+
+	def directPredict(self, data):
+		return self.model.predict(data)
 
 
 if __name__ == "__main__":
