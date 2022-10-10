@@ -115,24 +115,11 @@ if model.loadModel("my_model"):
 		[sg.Frame('Цена автомобиля', layout=Price, border_width=6, background_color="#B1A7A6", title_color="black", font="bold")]
 	]
 
-	#Кнопки для вывода графиков
-	GraphBottons = [[sg.Button('График1', enable_events=True, key='-Graph1-',  size=(29, 2),
-							   border_width=2, button_color=('#BA181B'), font='Helvetica 14'),
-					 sg.Button('График2', enable_events=True, key='-Graph2-',  size=(29, 2),
-							   border_width=2, button_color=('#BA181B'), font='Helvetica 14')]]
-
-	Graphs = [[sg.Frame('Графики', layout=GraphBottons, border_width=9, background_color="#151314", title_color ="white", font="bold")]]
-
-	#Кнопка выхода
-	ExitBotton = [[sg.Button('Выйти', enable_events=True, key='-Exit-', size=(8, 2), border_width=16, button_color=('#A4161A'), font='Helvetica 14')]]
-
 	#Все элемнты интерфейса
-	layout = [[sg.Frame('', layout=Input, border_width=9, background_color="#B1A7A6", title_color ="black")],
-			  [sg.Column(Graphs, element_justification='c', background_color="#151314"),
-			   sg.Column(ExitBotton, element_justification='c', background_color="#151314")]]
+	layout = [[sg.Frame('', layout=Input, border_width=9, background_color="#B1A7A6", title_color ="black", pad=(0, 5))]]
 
 	#Создание окна
-	window = sg.Window('Компьютерный практикум', layout, background_color='#151314')
+	window = sg.Window('Компьютерный практикум', layout, background_color='#151314', size=(850, 506))
 
 	#Обработка событий
 	while True:
@@ -151,7 +138,7 @@ if model.loadModel("my_model"):
 							float(values['speed_to_100-input']), float(values['consumption-input'])]
 
 					text_elem = window['-OutputText-']
-					text_elem.update(model.predict(data)) #Ввод-вывод данных для нейронной сети
+					text_elem.update(int(model.predict(data))) #Ввод-вывод данных для нейронной сети
 				except ValueError as e:
 					sg.Popup('Введены некорректные значения атрибутов!', keep_on_top=True)
 
