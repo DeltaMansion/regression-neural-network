@@ -1,3 +1,16 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:5984621b09e5eec2b673e743c239cac93f0e8d2865c7401905e2ff0876635678
-size 1671
+mark;Model;Mileage;Year;Car_class;Maximum_power;Drive_unit;Box;Boost_type;Volume;Torque;Maximum_speed;Speed_to_100;Consumption;Price
+Audi;Q7;39000.00;2020.00;J;249.00;full;automatic;turbocharging;3.00;600.00;225.00;7.1;8;5400000.00
+Audi;Q7;70000.00;2019.00;J;249.00;full;automatic;turbocharging;3.00;600.00;225.00;7.1;8;6000000.00
+BMW;X6;107000.00;2015.00;J;249.00;full;automatic;turbocharging;3.00;560.00;230.00;6.7;6.7;3270000.00
+BMW;M3;36000.00;2015.00;D;431.00;rear;robot;no;3.00;550.00;280.00;4.10;8.30;4500000.00
+Chevrolet;Aveo;160000.00;2005.00;B;83.00;front;mechanics;no;1.40;145.00;170.00;12.10;7.00;210000.00
+Chevrolet;Cruze;182000.00;2013.00;C;141.00;front;automatic;no;1.80;141.00;190.00;11.50;7.80;530000.00
+Ford;Focus;440000.00;2009.00;C;145.00;front;automatic;no;2.00;185.00;198.00;10.80;8.00;490000.00
+Honda;Civic;145000.00;2004.00;M;125.00;front;automatic;no;1.70;154.00;192.00;11.70;9.30;348000.00
+Hyundai;Solaris;193000.00;2013.00;B;123.00;front;automatic;no;1.60;155.00;180.00;11.20;6.50;550000.00
+Kia;Ceed;59700.00;2017.00;C;130.00;front;automatic;no;1.60;157.00;190.00;11.80;6.80;1299000.00
+Land Rover;Range Rover;150000.00;2014.00;J;339.00;full;automatic;turbocharging;4.40;700.00;217.00;6.90;8.70;3700000.00
+Mazda;3;118000.00;2010.00;C;105.00;front;automatic;no;1.60;145.00;177.00;13.10;7.30;600000.00
+Mercedes-Benz;C-Class;189000.00;2012.00;D;204.00;rear;automatic;turbocharging;1.80;310.00;240.00;7.20;6.40;970000.00
+Nissan;X-Trail;57000.00;2018.00;J;171.00;full;variator;no;2.50;380.00;199.00;9.50;6.20;1599000.00
+Volkswagen;Passat;209000.00;2009.00;D;140.00;front;automatic;turbocharging;2.00;320.00;206.00;9.80;6.20;555000.00
