@@ -1,19 +1,3 @@
-from cx_Freeze import setup, Executable
-
-executables = [Executable('cooked_interface.py')]
-
-include_files = ['model', 'my_model', 'dataset.csv', "file"]
-
-options = {
-	'build_exe': {
-		'include_msvcr': True,
-		'build_exe': 'build_windows',
-		'include_files': include_files,
-	}
-}
-
-setup(name='car_cost',
-	  version='0.0.1',
-	  description='Neural regression of cars cost',
-	  executables=executables,
-	  options=options)
+version https://git-lfs.github.com/spec/v1
+oid sha256:ad4af2522497ac6c072d91b65e5048319853e6ced9896f5fd934827b616b83c6
+size 438
