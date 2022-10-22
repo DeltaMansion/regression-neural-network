@@ -1,6 +1,5 @@
 import PySimpleGUI as sg
 import pandas as pd
-import numpy as np
 from model.model import Model
 
 model = Model()
