@@ -6,10 +6,12 @@ from file.csvmanager import CsvManager
 from file.filemanager import FileManager
 from keras.layers import Dense
 from keras.models import Sequential
-
+from sklearn.preprocessing import MinMaxScaler
+import joblib
 
 class Model:
 
+	scaler = None
 	fileHandler = None
 	data = None
 	x_train = None
@@ -54,6 +56,13 @@ class Model:
 
 			if show_loading:
 				print("\r100%\n")
+
+				self.scaler = MinMaxScaler(feature_range=(0, 1))
+				self.scaler = self.scaler.fit(self.data[:, 0:14])
+
+				if os.path.isfile("scaler_save.gz") == False:
+					joblib.dump(self.scaler, "scaler_save.gz")
+				self.data[:, 0:14] = self.scaler.transform(self.data[:, 0:14])
 
 
 	def loadCsvData(self,
@@ -454,40 +463,45 @@ class Model:
 		"""
 		Возвращает вычесленное значение для подставляемых данных в обученную модель
 
-		:param data: 1d np.array
+		:param data: 1d or 2d np.array
 		:return:
 		"""
 
+		data = np.array(data)
+		if data.shape == (14,):
+			data = [data]
+
+		if self.scaler == None:
+			self.scaler = joblib.load('scaler_save.gz')
+
+		preparedData = []
 		predictedData = []
 
 		if self.model:
+			for item in data:
+				preparedItem = np.empty(item.shape, dtype=np.object)
 
-			if type(data) is list:
-				data = np.array(data)
+				for i in range(len(item)):
+					try:
+						preparedItem[i] = Model.convertFloat(str(item[i]))
+					except Exception:
+						preparedItem[i] = Model.convertUnit(self.uniqueValues[self.columns[i]], str(item[i]))
+				preparedData.append(preparedItem)
 
-			data = data.reshape((1,)+data.shape)
-			rows = 0
-			cols = 0
-
-			if data.shape[0] > 0:
-				rows = data.shape[0]
-
-			if len(data.shape) == 2 and data.shape[1] > 0:
-				cols = data.shape[1]
-
-			preparedData = np.empty(data.shape, dtype=np.object)
-
-			for i in range(rows):
-				if len(data.shape) == 2:
-					for j in range(cols):
-						try:
-							preparedData[i][j] = Model.convertFloat(str(data[i][j]))
-						except Exception:
-							preparedData[i][j] = Model.convertUnit(self.uniqueValues[self.columns[i]], str(data[i][j]))
-
+			preparedData = self.scaler.transform(preparedData)
 			predictedData = self.model.predict(np.asarray(preparedData).astype(np.float32))
 
-		return predictedData[0][0]
+			# потому что модель выводит один элемент как массив
+			results = []
+			for item in predictedData:
+				results.append(item[0])
+
+			if len(results) == 1:
+				results = results[0]
+		return results
+
+	def directPredict(self, data):
+		return self.model.predict(data)
 
 
 if __name__ == "__main__":
