@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import timeit
 from model.model import Model
-from keras.layers import Dense, Dropout
+from keras.layers import  Conv2D, AveragePooling2D, Dense, Dropout, Flatten, BatchNormalization
 import matplotlib.pylab as pylab
 from file.filemanager import FileManager
 from file.csvmanager import CsvManager
@@ -23,8 +23,11 @@ x_train, y_train, x_test, y_test = model.x_train, model.y_train, model.x_test, m
 mm = 8
 model.initSequential(layers=[
 			Dense(len(x_train[0]), input_shape=(len(x_train[0]),), activation='relu'),
+            BatchNormalization(),
 			Dense(128 * mm, activation='relu'),
+            BatchNormalization(),
 			Dense(64 * mm, activation='relu'),
+            BatchNormalization(),
 			Dense(16 * mm, activation='relu'),
             Dense(4 * mm, activation='relu'),
 			Dense(1, activation='linear')
@@ -39,12 +42,16 @@ callbacks=[]
 SAVE_BEST_MODELS = False
 if SAVE_BEST_MODELS == True:
     PATH_TO_SAVE_THINGS = str(pathlib.Path().resolve()) + '\\' + str(os.path.basename(__file__)).replace('.py', '') + '\\'
-    checkpoint = ModelCheckpoint(PATH_TO_SAVE_THINGS + 'ep {epoch} - mse {mse:.0f} - val_mse {val_mse:.0f}', verbose=0, monitor='val_mse',save_best_only=True, mode='min')
+    checkpoint = ModelCheckpoint(PATH_TO_SAVE_THINGS + 'ep {epoch} - mse {mse:.0f} - val_mse {val_mse:.0f}.h5', verbose=0, monitor='val_mse',save_best_only=True, mode='min')
     callbacks.append(checkpoint)
 
 start_seconds: float = timeit.default_timer()
 history = model.fit(x_train, y_train, epochs=300, verbose=2, validation_split=0.2, batch_size=256, callbacks=callbacks)
 end_seconds: float = timeit.default_timer()
+
+best_val_acc = min(history.history['val_mse'])
+index_of_best_vall_acc = history.history['val_mse'].index(best_val_acc)
+print('current train: ' + str(history.history['mse'][index_of_best_vall_acc]) + ' with best test: ' + str(best_val_acc))
 
 # тестирование на пользовательских данных и данные для таблицы
 FileHandler = CsvManager()
