@@ -3,10 +3,15 @@ import numpy as np
 import matplotlib.pyplot as plt
 import timeit
 from model.model import Model
-from keras.layers import Dense
+from keras.layers import Dense, Dropout
 import matplotlib.pylab as pylab
 from file.filemanager import FileManager
 from file.csvmanager import CsvManager
+from keras.callbacks import ModelCheckpoint
+import pathlib
+from pathlib import Path
+import os
+
 np.set_printoptions(formatter={'float': '{: 0.7f}'.format})
 
 model = Model()
@@ -29,8 +34,16 @@ model.initSequential(layers=[
 			metrics=['mse'])
 
 # обучение
+callbacks=[]
+
+SAVE_BEST_MODELS = False
+if SAVE_BEST_MODELS == True:
+    PATH_TO_SAVE_THINGS = str(pathlib.Path().resolve()) + '\\' + str(os.path.basename(__file__)).replace('.py', '') + '\\'
+    checkpoint = ModelCheckpoint(PATH_TO_SAVE_THINGS + 'ep {epoch} - mse {mse:.0f} - val_mse {val_mse:.0f}', verbose=0, monitor='val_mse',save_best_only=True, mode='min')
+    callbacks.append(checkpoint)
+
 start_seconds: float = timeit.default_timer()
-history = model.fit(x_train, y_train, epochs=5, verbose=2, validation_split=0.2, batch_size=256)
+history = model.fit(x_train, y_train, epochs=300, verbose=2, validation_split=0.2, batch_size=256, callbacks=callbacks)
 end_seconds: float = timeit.default_timer()
 
 # тестирование на пользовательских данных и данные для таблицы
@@ -60,7 +73,7 @@ plt.plot(history.history['val_mse'], label='val_mse')
 plt.xlabel('Эпохи')
 plt.ylabel('mse')
 plt.legend(loc='best')
-plt.text(0.1, 0.1005, 'Время обучения: ' + str(end_seconds - start_seconds) + ' сек.')
+plt.title('Время обучения: ' + str(round(end_seconds - start_seconds, 2)) + ' сек.')
 
 #График регрессии
 min = min(min(predicts), min(reals)) * 0.7
