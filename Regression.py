@@ -1,4 +1,5 @@
 from keras.callbacks import EarlyStopping
+import keras
 import numpy as np
 import matplotlib.pyplot as plt
 import timeit
@@ -10,7 +11,17 @@ from file.csvmanager import CsvManager
 from keras.callbacks import ModelCheckpoint
 import pathlib
 from pathlib import Path
+import tensorflow as tf
 import os
+import random
+
+seed = 5
+os.environ['PYTHONHASHSEED']=str(seed)
+np.random.seed(seed)
+random.seed(seed)
+tf.random.set_seed(seed)
+keras.utils.set_random_seed(seed)
+
 
 np.set_printoptions(formatter={'float': '{: 0.7f}'.format})
 
@@ -20,38 +31,48 @@ model.prepare(show_loading=True)
 model.splitTrainTest(labels=["Price"])
 x_train, y_train, x_test, y_test = model.x_train, model.y_train, model.x_test, model.y_test
 
-mm = 8
+mm = 6
+
 model.initSequential(layers=[
-			Dense(len(x_train[0]), input_shape=(len(x_train[0]),), activation='relu'),
+			Dense(len(x_train[0]), input_shape=(len(x_train[0]),), activation='relu', kernel_initializer='he_normal'),
             BatchNormalization(),
-			Dense(128 * mm, activation='relu'),
+			Dense(128 * mm, activation='relu', kernel_initializer='he_normal'),
             BatchNormalization(),
-			Dense(64 * mm, activation='relu'),
+            Dropout(0.3),
+			Dense(64 * mm, activation='relu', kernel_initializer='he_normal'),
             BatchNormalization(),
-			Dense(16 * mm, activation='relu'),
-            Dense(4 * mm, activation='relu'),
-			Dense(1, activation='linear')
+            Dropout(0.2),
+			Dense(16 * mm, activation='relu', kernel_initializer='he_normal'),
+            Dropout(0.1),
+            Dense(4 * mm, activation='relu', kernel_initializer='he_normal'),
+			Dense(1, activation='linear', kernel_initializer='he_normal')
 		],
-			optimizer='adam',
-			loss='mse',
-			metrics=['mse'])
+			optimizer='Adam',
+			loss='mse')
 
 # обучение
 callbacks=[]
 
-SAVE_BEST_MODELS = False
+SAVE_BEST_MODELS = True
 if SAVE_BEST_MODELS == True:
     PATH_TO_SAVE_THINGS = str(pathlib.Path().resolve()) + '\\' + str(os.path.basename(__file__)).replace('.py', '') + '\\'
-    checkpoint = ModelCheckpoint(PATH_TO_SAVE_THINGS + 'ep {epoch} - mse {mse:.0f} - val_mse {val_mse:.0f}.h5', verbose=0, monitor='val_mse',save_best_only=True, mode='min')
+    checkpoint = ModelCheckpoint(PATH_TO_SAVE_THINGS + 'ep {epoch} - loss {loss:.0f} - val_loss {val_loss:.0f}.h5', verbose=0, monitor='val_loss',save_best_only=True, mode='min')
     callbacks.append(checkpoint)
 
 start_seconds: float = timeit.default_timer()
-history = model.fit(x_train, y_train, epochs=300, verbose=2, validation_split=0.2, batch_size=256, callbacks=callbacks)
+history = model.fit(x_train, y_train, epochs=300, verbose=2, batch_size=512, callbacks=callbacks, validation_data = (x_test, y_test))
 end_seconds: float = timeit.default_timer()
 
-best_val_acc = min(history.history['val_mse'])
-index_of_best_vall_acc = history.history['val_mse'].index(best_val_acc)
-print('current train: ' + str(history.history['mse'][index_of_best_vall_acc]) + ' with best test: ' + str(best_val_acc))
+pivot = history.history['loss'][0] * 1.1
+history.history['loss'] = [float(i) for i in history.history['loss'] if int(i) < pivot]
+
+pivot = history.history['val_loss'][0] * 1.1
+
+history.history['val_loss'] = [float(i) for i in history.history['val_loss'] if int(i) < pivot]
+
+best_val_acc = min(history.history['val_loss'])
+index_of_best_vall_acc = history.history['val_loss'].index(best_val_acc)
+print('current train: ' + str(history.history['loss'][index_of_best_vall_acc]) + ' with best test: ' + str(best_val_acc))
 
 # тестирование на пользовательских данных и данные для таблицы
 FileHandler = CsvManager()
@@ -75,10 +96,10 @@ table_data = list(zip(reals, predicts, accuracy))
 plt.figure().set_size_inches(11, 5)
 
 plt.subplot(1, 2, 1)
-plt.plot(history.history['mse'], label='mse', color='#bb3333')
-plt.plot(history.history['val_mse'], label='val_mse')
+plt.plot(history.history['loss'], label='loss')
+plt.plot(history.history['val_loss'], label='val_loss', color='#bb3333')
 plt.xlabel('Эпохи')
-plt.ylabel('mse')
+plt.ylabel('loss')
 plt.legend(loc='best')
 plt.title('Время обучения: ' + str(round(end_seconds - start_seconds, 2)) + ' сек.')
 
