@@ -48,7 +48,7 @@ model.initSequential(layers=[
 			Dense(1, activation='linear', kernel_initializer='he_normal')
 		],
 			optimizer='Adam',
-			loss='mse')
+			loss='mean_absolute_error')
 
 # обучение
 callbacks=[]
@@ -60,7 +60,7 @@ if SAVE_BEST_MODELS == True:
     callbacks.append(checkpoint)
 
 start_seconds: float = timeit.default_timer()
-history = model.fit(x_train, y_train, epochs=300, verbose=2, batch_size=512, callbacks=callbacks, validation_data = (x_test, y_test))
+history = model.fit(x_train, y_train, epochs=5000, verbose=2, batch_size=512, callbacks=callbacks, validation_data = (x_test, y_test))
 end_seconds: float = timeit.default_timer()
 
 pivot = history.history['loss'][0] * 1.1
